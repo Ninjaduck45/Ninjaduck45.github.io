@@ -7,8 +7,22 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>The Horse Says YES!</h1>
-  <script src="js/main.js"></script>
-  <h2><img src="/images/yes2.gif" alt="Horse Yes 2" width = "1920" height = "1080" /></h2>
+
+  <h1 id="message"></h1>
+
+  <img id="horse" alt="Wise Horse" style="max-width:100%; height:auto;">
+
+  <script>
+    const options = [
+      { text: "The Horse Says YES!", img: "/images/yes2.gif" },
+      { text: "The Horse Says NO!",  img: "/images/no2.gif" }
+    ];
+
+    const pick = options[Math.floor(Math.random() * options.length)];
+
+    document.getElementById("message").textContent = pick.text;
+    document.getElementById("horse").src = pick.img;
+  </script>
+
 </body>
 </html>
