@@ -1,11 +1,46 @@
-<h1 id="message"></h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wise All Knowing Horse</title>
+  <link rel="icon" type="image/png" href="/images/faviconW.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .navbar {
+    position: fixed;       /* stays at top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;         /* horizontal row */
+    justify-content: space-around;  /* evenly distribute buttons */
+    padding: 12px 0;
+    z-index: 1000;
+  }
+    body{
+      margin: 0;
+      padding-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  
+  <nav class="navbar">
+    <a href="index.html">THE ALL KNOWING</a>
+    <a href="privileges.html">Privileges</a>
+    <a href="Gambling.html">Gambling</a>
+    <a href="lore.html">Lore</a>
+    <a href="Funny.html">Funny</a>
+  </nav>
+  
+
+  <h1 id="message"></h1>
 
   <img id="horse" alt="Wise Horse" style="width:100%; height:100%;">
 
   <script>
     const options = [
-      { text: "Gone, reduced to atoms!", img: "/images/revoked.gif" },
-      { text: "You have been measured, and found worthy",  img: "/images/horse-reinstated.gif" }
+      { text: "The Horse Says YES!", img: "/images/yes2.gif" },
+      { text: "The Horse Says NO!",  img: "/images/no2.gif" }
     ];
 
     const pick = options[Math.floor(Math.random() * options.length)];
@@ -14,3 +49,7 @@
     document.getElementById("horse").src = pick.img;
   </script>
 
+
+
+</body>
+</html>
