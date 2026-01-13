@@ -1,1 +1,16 @@
+<h1 id="message"></h1>
+
+  <img id="horse" alt="Wise Horse" style="width:100%; height:100%;">
+
+  <script>
+    const options = [
+      { text: "Gone, reduced to atoms!", img: "/images/revoked.gif" },
+      { text: "You have been measured, and found worthy",  img: "/images/horse-reinstated.gif" }
+    ];
+
+    const pick = options[Math.floor(Math.random() * options.length)];
+
+    document.getElementById("message").textContent = pick.text;
+    document.getElementById("horse").src = pick.img;
+  </script>
 
