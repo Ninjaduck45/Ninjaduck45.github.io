@@ -32,7 +32,19 @@
     <a href="Funny">Funny</a>
     <a href="ShouldYouBuyMarathon.html">Marathon</a>
   </nav>
-  
+  <script>
+    const options = [
+      { text: "The Horse Says YES!", img: "/images/yes2.gif" },
+      { text: "The Horse Says YES 100%!",  img: "/images/yes2.gif" }
+      { text: "The Horse Says YES ABSOLUTELY!",  img: "/images/yes1.gif" }
+      { text: "The Horse Says WHY OF COURSE MY GOOD FELLOW",  img: "/images/yes2.gif" }
+    ];
+
+    const pick = options[Math.floor(Math.random() * options.length)];
+
+    document.getElementById("message").textContent = pick.text;
+    document.getElementById("horse").src = pick.img;
+  </script>
 
 <h1>
 
