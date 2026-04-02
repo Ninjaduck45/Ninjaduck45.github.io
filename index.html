@@ -38,13 +38,14 @@
 
   <script>
 
-
-document.querySelectorAll('.navbar a').forEach(link => {
-  link.addEventListener('click', function(e) {
+<script>
+  window.addEventListener('load', () => {
     const music = new Audio('horse-neighing-sound-effect.mp3');
-    music.play();
+    music.play().catch(err => {
+      console.log("Autoplay blocked:", err);
+    });
   });
-});
+</script>
 
 
     
