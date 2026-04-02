@@ -39,13 +39,12 @@
   <script>
 
 
-
-    function playMusic(){
-    var music = new Audio('horse-neighing-sound-effect.mp3');
+document.querySelectorAll('.navbar a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    const music = new Audio('horse-neighing-sound-effect.mp3');
     music.play();
-    }
-
-    document.getElementById('navbar').addEventListener('click', playMusic);
+  });
+});
 
 
     
