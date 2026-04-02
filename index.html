@@ -39,16 +39,7 @@
 
 
 <script>
-  window.addEventListener('load', () => {
-    const music = new Audio('horse-neighing-sound-effect.mp3');
-    music.play().catch(err => {
-      console.log("Autoplay blocked:", err);
-    });
-  });
-
-
-
-  
+ 
     const options = [
       { text: "The Horse Says YES!", img: "images/yes2.gif" },
       { text: "The Horse Says NO!",  img: "images/no2.gif" }
@@ -58,6 +49,15 @@
 
     document.getElementById("message").textContent = pick.text;
     document.getElementById("horse").src = pick.img;
+
+
+     window.addEventListener('load', () => {
+        const music = new Audio('audio/horse-neighing-sound-effect.mp3');
+        music.play().catch(err => {
+          console.log("Autoplay blocked:", err);
+        });
+      });
+      
   </script>
 
 
