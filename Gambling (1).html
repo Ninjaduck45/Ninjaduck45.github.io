@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Horse Gambling, WHAT WILL HE DECIDE</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #c0c0c0;
+    --box: #ffffff;
+    --ink: #000000;
+    --edge: #808080;
+    --field: #ffffff;
+    --muted: #444444;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  
+  html { height: 100%; }
+  body {
+    margin: 0;
+    padding: 1px 12px;
+    background: var(--page);
+    color: var(--ink);
+    font: 16px "Times New Roman", Times, serif;
+    text-align: center;
+  }
+  #box {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 12px;
+    background: var(--box);
+    border: 3px ridge var(--edge);
+  }
+  h2 a { color: inherit; }
+  canvas { width: 100%; max-width: 400px; height: auto; }
+  button {
+    font: 16px "Times New Roman", Times, serif;
+    padding: 5px 18px;
+    color: var(--ink);
+  }
+  #result { min-height: 1.4em; font-weight: bold; }
+  #options { max-width: 400px; margin: 0 auto; text-align: left; }
+  label { display: block; margin-bottom: 4px; }
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 90px;
+    box-sizing: border-box;
+    padding: 6px;
+    background: var(--field);
+    color: var(--ink);
+    border: 2px inset var(--edge);
+    font: 16px "Times New Roman", Times, serif;
+    resize: vertical;
+  }
+  .hint { margin: 4px 0 8px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<div id="box">
+  <h2><a href="#">HORSE WHEEL</a></h2>
+  <canvas id="wheel" width="800" height="800" role="img" aria-label="Spinner wheel showing your choices"></canvas>
+  <p><button id="spin" type="button">SPIN</button></p>
+  <p id="result" aria-live="polite">The horse awaits your question.</p>
+
+  <div id="options">
+    <textarea id="choicesInput" spellcheck="false">Option 1
+Option 2
+Option 3
+Option 4</textarea>
+    <button id="update" type="button">UPDATE CHOICES</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById("wheel");
+  const ctx = canvas.getContext("2d");
+  const input = document.getElementById("choicesInput");
+  const spinButton = document.getElementById("spin");
+  const updateButton = document.getElementById("update");
+  const result = document.getElementById("result");
+  const TAU = Math.PI * 2;
+
+  let choices = [];
+  let angle = 0;
+  let busy = false;
+
+  function readChoices() {
+    return input.value.split("\n").map(s => s.trim()).filter(Boolean).slice(0, 12);
+  }
+
+  const p = {
+    fills: ["#e6e6e6", "#cccccc", "#b3b3b3", "#d9d9d9"],
+    ink: "#000000",
+    hub: "#c0c0c0"
+  };
+
+  function draw() {
+    const cx = 200, cy = 200, r = 185;
+    const slice = TAU / choices.length;
+    ctx.setTransform(2, 0, 0, 2, 0, 0);
+    ctx.clearRect(0, 0, 400, 400);
+
+    choices.forEach((choice, i) => {
+      const start = angle - Math.PI / 2 + i * slice;
+      const end = start + slice;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, start, end);
+      ctx.closePath();
+      ctx.fillStyle = p.fills[i % p.fills.length];
+      ctx.fill();
+      ctx.strokeStyle = p.ink;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(start + slice / 2);
+      ctx.fillStyle = p.ink;
+      const size = choices.length > 8 ? 13 : choices.length > 5 ? 15 : 16;
+      ctx.font = size + 'px "Times New Roman", Times, serif';
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      const maxWidth = r - 55;
+      let label = choice;
+      while (ctx.measureText(label).width > maxWidth && label.length > 1) {
+        label = label.slice(0, -1);
+        if (ctx.measureText(label + "…").width <= maxWidth) { label += "…"; break; }
+      }
+      ctx.fillText(label, r - 15, 0);
+      ctx.restore();
+    });
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 32, 0, TAU);
+    ctx.fillStyle = p.hub;
+    ctx.fill();
+    ctx.strokeStyle = p.ink;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.font = "27px serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("", cx, cy + 1);
+
+    ctx.beginPath();
+    ctx.moveTo(185, 5);
+    ctx.lineTo(215, 5);
+    ctx.lineTo(200, 35);
+    ctx.closePath();
+    ctx.fillStyle = p.ink;
+    ctx.fill();
+  }
+
+  function updateChoices() {
+    if (busy) return;
+    const next = readChoices();
+    if (next.length < 2) {
+      result.textContent = "Enter your wishes, if you DARE";
+      return;
+    }
+    choices = next;
+    angle = 0;
+    result.textContent = "The horse awaits";
+    draw();
+  }
+
+  function spin() {
+    if (busy || choices.length < 2) return;
+    busy = true;
+    spinButton.disabled = true;
+    updateButton.disabled = true;
+    result.textContent = "*Horse Thoughts*";
+
+    const slice = TAU / choices.length;
+    const winner = Math.floor(Math.random() * choices.length);
+    // Angle that puts the winner's midpoint under the top pointer.
+    const desired = (((-(winner + 0.5) * slice) % TAU) + TAU) % TAU;
+    const current = ((angle % TAU) + TAU) % TAU;
+    const forward = (((desired - current) % TAU) + TAU) % TAU;
+    const turns = 6 + Math.floor(Math.random() * 3);
+    const start = angle;
+    const change = turns * TAU + forward;
+    const duration = 3200;
+    const t0 = performance.now();
+
+    function animate(now) {
+      const t = Math.min(1, (now - t0) / duration);
+      angle = start + change * (1 - Math.pow(1 - t, 4));
+      draw();
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        angle = desired;
+        draw();
+        result.textContent = "IT IS DECIDED: " + choices[winner];
+        busy = false;
+        spinButton.disabled = false;
+        updateButton.disabled = false;
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  updateButton.addEventListener("click", updateChoices);
+  spinButton.addEventListener("click", spin);
+  choices = readChoices();
+  draw();
+})();
+</script>
+</body>
+</html>
