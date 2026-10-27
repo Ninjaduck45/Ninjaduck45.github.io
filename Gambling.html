@@ -1,42 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-    <meta charset="UTF-8">
-  <title>Wise All Knowing Horse</title>
-  <link rel="icon" type="image/png" href="/images/faviconW.png">
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    .navbar {
-    position: fixed;       /* stays at top */
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;         /* horizontal row */
-    justify-content: space-around;  /* evenly distribute buttons */
-    padding: 12px 0;
-    z-index: 1000;
-  }
-    body{
-      margin: 0;
-      padding-top: 30px;
-    }
-  </style>
-</head>
-<body>
-  
-  <nav class="navbar">
-    <a href="index.html">THE ALL KNOWING</a>
-    <a href="privileges.html">Privileges</a>
-    <a href="Gambling.html">Gambling</a>
-    <a href="lore.html">Lore</a>
-    <a href="Funny">Funny</a>
-    <a href="ShouldYouBuyMarathon.html">Marathon</a>
-  </nav>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Horse Gambling, WHAT WILL HE DECIDE</title>
+<link rel="icon" type="image/png" href="/images/faviconW.png">
+<link rel="stylesheet" href="css/style.css">
 <style>
   :root {
     color-scheme: light;
@@ -50,11 +19,24 @@
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  
+
   html { height: 100%; }
+
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    z-index: 1000;
+  }
+
   body {
     margin: 0;
-    padding: 1px 12px;
+    /* top padding clears the fixed navbar; JS below sets the exact height */
+    padding: 70px 12px 1px;
     background: var(--page);
     color: var(--ink);
     font: 16px "Times New Roman", Times, serif;
@@ -93,6 +75,16 @@
 </style>
 </head>
 <body>
+
+<nav class="navbar">
+  <a href="index.html">THE ALL KNOWING</a>
+  <a href="privileges.html">Privileges</a>
+  <a href="Gambling.html">Gambling</a>
+  <a href="lore.html">Lore</a>
+  <a href="Funny">Funny</a>
+  <a href="ShouldYouBuyMarathon.html">Marathon</a>
+</nav>
+
 <div id="box">
   <h2><a href="#">HORSE WHEEL</a></h2>
   <canvas id="wheel" width="800" height="800" role="img" aria-label="Spinner wheel showing your choices"></canvas>
@@ -179,7 +171,7 @@ Option 4</textarea>
     ctx.font = "27px serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("", cx, cy + 1);
+    ctx.fillText("🐴", cx, cy + 1);
 
     ctx.beginPath();
     ctx.moveTo(185, 5);
@@ -246,9 +238,15 @@ Option 4</textarea>
   draw();
 })();
 </script>
+<script>
+// Keep content below the fixed navbar, even if the links wrap on narrow screens.
+(() => {
+  const nav = document.querySelector(".navbar");
+  function fit() { document.body.style.paddingTop = (nav.offsetHeight + 10) + "px"; }
+  fit();
+  window.addEventListener("resize", fit);
+  window.addEventListener("load", fit);
+})();
+</script>
 </body>
 </html>
-
-
-
-
