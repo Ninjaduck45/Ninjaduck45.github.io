@@ -101,6 +101,9 @@ Option 4</textarea>
 </div>
 
 <script>
+   const hubImage = new Image();
+  hubImage.src = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDAQ8QEBYTFioXFypZOzI7WVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVn/wAARCABAAEADASIAAhEBAxEB/8QAGgAAAgMBAQAAAAAAAAAAAAAAAAQDBQYBAv/EADIQAAIBAwMCBQIDCQEAAAAAAAECAwAEEQUSITFBExRRYYEGcTKRsRUiI0JSgoOywcL/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/ANV9Znb9OSnOMTQ8/wCVa5r2sSweSh09ldrqUxmWMLIUwpbABIGT7n161dXFvDdQtDcRRzRN1SRQyn4NLLpGmrbPbrp9osDnc0YhUKx7EjHWgza3Wq3Gq6J5ify2Zpo2XauJQozkgMQCRxjJwRmmfqeSRb1xAyxSjTLl1l25ZcFeBz3q+/Ztj4MMPk7fwoG3xJ4YwjeoHY1M8EMkgkeJGcKU3FQTtPUfY4oKKS+urD6HF6J1muY7VXEjLwTx1GffFIanf3ek39zK7W012lhGfGMZUDdOV5GfwqDn461qEsbSOz8oltCtrgjwQg2YPPTpXt7aCR2eSGN2dPDYsoJZf6T7e1Bjbi/u9L1DVJzdQ3s6W9tGJVjChd0jDLLuxxnPUdqv9ButQma5iv0bbGV8OV1RGbI5BVWIGPXuDTsGl2FvG8cFlbRo67HVYlAYeh45HJqS0srWxjMdnbQ26E5KxIFBPxQT0UUVVFckDGNghwxBwfQ12lTfRlysMc0+04LRplQR1GTxQIafe3siR7FF2uwb3OEKNjlc9G59AMd6cOopHKIrmKWKQgsAELhgOpBXPt1xS9pBcpYsbaOOC53sMzpkMu5mHCnj8X61y5HmdTt7c3DJLGviS7DjsRhc885J47DtxURZW9xFcxl4XDqCVOOxHUVJXmONIo1SNQqLwAK9VVFFFFArqExisblo2HiLGcYPIJ6GixmtPDFvbSKwh/h4HsB+fUfnSWqaWs05uUjL702Tor7C6/oeOMHr8VBoNjIl3Ne5lS1mXMMUrBiM4JbjpnA4qIvqjngiuE2TRq6+jDp9vSpKrZ7uWHW4o2bFq0WDx0dm/dOf7SPkVVMaY7vYRGRizqCjE9SQSP8AlNVWxXMWny3EVxIscbM00Tk8MCcsPuDn4IqyBBGRyDRBRWet5AZk3RFVVgdxJ655PTv6VoaBXU3MenzkfiK7R9zwP1piNFijWNBhUAUD2FK6juZrOJf57hc/ZQW/8inKgKrrqAXN7cW742z2oUEgHGGPb5FWNKPxq0HvBJ/slBUQfTzQRrEPCYKu1ZN7hl7E46EketaKiig//9k=";
+
 (() => {
   const canvas = document.getElementById("wheel");
   const ctx = canvas.getContext("2d");
@@ -115,7 +118,7 @@ Option 4</textarea>
   let busy = false;
 
   function readChoices() {
-    return input.value.split("\n").map(s => s.trim()).filter(Boolean).slice(0, 12);
+    return input.value.split("\n").map(s => s.trim()).filter(Boolean).slice(0, Infinity);
   }
 
   const p = {
@@ -161,17 +164,23 @@ Option 4</textarea>
       ctx.restore();
     });
 
-    ctx.beginPath();
+        ctx.beginPath();
     ctx.arc(cx, cy, 32, 0, TAU);
     ctx.fillStyle = p.hub;
     ctx.fill();
-    ctx.strokeStyle = p.ink;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.font = "27px serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("", cx, cy + 1);
+
+    if (hubImage.complete && hubImage.naturalWidth > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, 32, 0, TAU);
+        ctx.clip();
+        ctx.drawImage(hubImage, cx - 32, cy - 32, 64, 64);
+        ctx.restore();
+    }
+
+  ctx.strokeStyle = p.ink;
+  ctx.lineWidth = 2;
+  ctx.stroke();
 
     ctx.beginPath();
     ctx.moveTo(185, 5);
